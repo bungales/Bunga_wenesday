@@ -9,44 +9,32 @@ class PegawaiController extends Controller
 {
     public function index()
     {
-        // Data contoh
-        $name              = "Bunga";
-        $tanggal_lahir     = "2006-05-10";   
-        $tgl_harus_wisuda  = "2026-09-30";
-        $current_semester  = 4;
-        $future_goal       = "Menjadi Software Engineer";
+        // Data dummy
+        $name = "Bunga Lestari";
+        $tanggalLahir = Carbon::create(2006, 5, 15);
+        $hobbies = ["Membaca", "Coding", "Olahraga", "menari","Traveling"];
+        $tglHarusWisuda = Carbon::create(2026, 10, 10);
+        $currentSemester = 3;
+        $futureGoal = "Masih Awal, Kejar TAK";
 
         // Hitung umur
-        $my_age = Carbon::parse($tanggal_lahir)->age;
+        $my_age = $tanggalLahir->diffInYears(Carbon::now());
 
-        // Hobi minimal 5
-        $hobbies = [
-            "Membaca Buku",
-            "Menulis",
-            "Badminton",
-            "Coding",
-            "Traveling"
+        // Hitung sisa waktu kuliah
+        $time_to_study_left = Carbon::now()->diffInDays($tglHarusWisuda);
+
+        // Data dikirim ke view
+        $pegawai = [
+            "name" => $name,
+            "my_age" => $my_age,
+            "hobbies" => $hobbies,
+            "tgl_harus_wisuda" => $tglHarusWisuda->toDateString(),
+            "time_to_study_left" => $time_to_study_left,
+            "current_semester" => $currentSemester,
+            "semester_info" => "Jangan main-main, kurangi menunda tugas!",
+            "future_goal" => $futureGoal
         ];
 
-        // Hitung sisa hari menuju tanggal wisuda
-        $time_to_study_left = Carbon::now()->diffInDays(Carbon::parse($tgl_harus_wisuda), false);
-
-        // Tentukan pesan sesuai semester
-        $semester_info = $current_semester < 3
-            ? "Masih Awal, Kejar TAK"
-            : "Jangan main-main, kurang-kurangi main game!";
-
-        // Kembalikan data dalam JSON
-        return response()->json([
-            "name"              => $name,
-            "my_age"            => $my_age,
-            "hobbies"           => $hobbies,
-            "tgl_harus_wisuda"  => $tgl_harus_wisuda,
-            "time_to_study_left"=> $time_to_study_left,
-            "current_semester"  => $current_semester,
-            "semester_info"     => $semester_info,
-            "future_goal"       => $future_goal
-        ]);
+        return view('pegawai', compact('pegawai'));
     }
 }
-
