@@ -156,6 +156,8 @@
 
             <div class="col-md-6">
                 {{-- Alerts --}}
+               <form action="{{ route('question.store') }}" method="POST">
+	            @csrf
                 <div class="card ">
                     <div class="card-body">
                         <h3 class="h5 mb-3">Alerts</h3>
@@ -165,6 +167,38 @@
                         <div class="alert alert-danger mb-0">Danger alert</div>
                     </div>
                 </div>
+
+                <div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Form Pertanyaan</h5>
+
+        @if ($errors->any())
+        <div class="alert alert-denger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{$error}}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form action="" method="POST">
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" class="form-control" name="nama" value="{{old('nama')}}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" email="email" value="{{old('email')}}">
+            </div>
+            <div class="mb-3">
+                <label for="pertanyaan" class="form-label">Pertanyaan</label>
+                <textarea class="form-control" nama="pertanyaan"  rows="4" name="pertanyaan">{{old('pertanyaan')}}"</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Kirim Pertanyaan</button>
+        </form>
+    </div>
+</div>
 
                 {{-- Buttons --}}
                 <div class="card">

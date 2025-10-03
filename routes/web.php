@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeContoller;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\MahasiswaController;
 
 Route::get('/', function () {
@@ -36,3 +37,6 @@ route::get('/home',[HomeContoller::class,'index']);
 
 
 Route::get('/pegawai', [PegawaiController::class, 'index']);
+
+Route::post('question/store', [QuestionController::class, 'store'])
+		->name('question.store');
