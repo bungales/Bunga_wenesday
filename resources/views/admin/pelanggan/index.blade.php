@@ -1,22 +1,71 @@
 <!--
 
+
+
+
+
+
+
+
 =========================================================
 * Volt Pro - Premium Bootstrap 5 Dashboard
 =========================================================
+
+
+
+
+
+
+
 
 * Product Page: https://themesberg.com/product/admin-dashboard/volt-bootstrap-5-dashboard
 * Copyright 2021 Themesberg (https://www.themesberg.com)
 * License (https://themesberg.com/licensing)
 
+
+
+
+
+
+
+
 * Designed and coded by https://themesberg.com
+
+
+
+
+
+
+
 
 =========================================================
 
+
+
+
+
+
+
+
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
+
+
+
+
+
+
+
 
 -->
 <!DOCTYPE html>
 <html lang="en">
+
+
+
+
+
+
+
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,21 +75,47 @@
     <meta name="title" content="Volt - Free Bootstrap 5 Dashboard">
     <meta name="author" content="Themesberg">
 
+
+
+
+
+
+
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('assets-admin/img/favicon/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="{{ asset('assets-admin/img/favicon/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16"
-        href="{{ asset('assets-admin/img/favicon/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets-admin/img/favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets-admin/img/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('assets-admin/img/favicon/site.webmanifest') }}">
     <link rel="mask-icon" href="{{ asset('assets-admin/img/favicon/safari-pinned-tab.svg') }}" color="#ffffff">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="theme-color" content="#ffffff">
 
+
+
+
+
+
+
+
     <!-- Volt CSS -->
     <link type="text/css" href="{{ asset('assets-admin/css/volt.css') }}" rel="stylesheet">
 
+
+
+
+
+
+
+
 </head>
+
+
+
+
+
+
+
 
 <body>
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
@@ -56,6 +131,13 @@
             </button>
         </div>
     </nav>
+
+
+
+
+
+
+
 
     <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
         <div class="sidebar-inner px-4 pt-3">
@@ -130,6 +212,13 @@
                     </a>
                 </li>
 
+
+
+
+
+
+
+
                 <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
                 <li class="nav-item">
                     <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/getting-started/quick-start/"
@@ -164,7 +253,21 @@
         </div>
     </nav>
 
+
+
+
+
+
+
+
     <main class="content">
+
+
+
+
+
+
+
 
         <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
             <div class="container-fluid px-0">
@@ -182,8 +285,8 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </span>
-                                <input type="text" class="form-control" id="topbarInputIconLeft"
-                                    placeholder="Search" aria-label="Search" aria-describedby="topbar-addon">
+                                <input type="text" class="form-control" id="topbarInputIconLeft" placeholder="Search"
+                                    aria-label="Search" aria-describedby="topbar-addon">
                             </div>
                         </form>
                         <!-- / Search form -->
@@ -192,8 +295,8 @@
                     <ul class="navbar-nav align-items-center">
                         <li class="nav-item dropdown">
                             <a class="nav-link text-dark notification-bell unread dropdown-toggle"
-                                data-unread-notifications="true" href="#" role="button"
-                                data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                data-unread-notifications="true" href="#" role="button" data-bs-toggle="dropdown"
+                                data-bs-display="static" aria-expanded="false">
                                 <svg class="icon icon-sm text-gray-900" fill="currentColor" viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -331,6 +434,13 @@
             </div>
         </nav>
 
+
+
+
+
+
+
+
         <div class="py-4">
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
@@ -353,11 +463,18 @@
                     <p class="mb-0">List data seluruh pelanggan</p>
                 </div>
                 <div>
-                    <a href="{{route(name: 'pelanggan.create')}}" class="btn btn-success text-white"><i
-                         class="far fa-question-circle me-1"></i> Tambah Pelanggan</a>
+                    <a href="{{ route('pelanggan.create') }}" class="btn btn-success text-white"><i
+                            class="far fa-question-circle me-1"></i> Tambah Pelanggan</a>
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
 
         <div class="row">
             <div class="col-12 mb-4">
@@ -367,8 +484,8 @@
                             <table id="table-pelanggan" class="table table-centered table-nowrap mb-0 rounded">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th class="border-0">First_Name</th>
-                                        <th class="border-0">Last_Name</th>
+                                        <th class="border-0">First Name</th>
+                                        <th class="border-0">Last Name</th>
                                         <th class="border-0">Birthday</th>
                                         <th class="border-0">Gender</th>
                                         <th class="border-0">Email</th>
@@ -385,7 +502,36 @@
                                             <td>{{ $item->gender }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->phone }}</td>
-                                            <td>Tombol Edit & Tombol Hapus</td>
+                                            <td>
+                                                {{-- ini edit --}}
+                                                <a href="{{route('pelanggan.edit', $item->pelanggan_id)}}"
+                                                    class="btn btn-info btn-sm">
+                                                    <svg class="icon icon-xs me-2" data-slot="icon" fill="none"
+                                                        stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10">
+                                                        </path>
+                                                    </svg>
+                                                    Edit
+                                                </a>
+                                                {{-- ini delete --}}
+                                                <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this pelanggan?')">
+                                                        <svg class="icon icon-xs me-2" data-slot="icon" fill="none"
+                                                            stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
+                                                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0">
+                                                            </path>
+                                                        </svg>
+                                                        Delete
+                                                    </button>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -396,12 +542,19 @@
             </div>
         </div>
 
+
+
+
+
+
+
+
         <footer class="bg-white rounded shadow p-5 mb-4 mt-4">
             <div class="row">
                 <div class="col-12 col-md-4 col-xl-6 mb-4 mb-md-0">
                     <p class="mb-0 text-center text-lg-start">© 2019-<span class="current-year"></span> <a
-                            class="text-primary fw-normal" href="https://themesberg.com"
-                            target="_blank">Themesberg</a></p>
+                            class="text-primary fw-normal" href="https://themesberg.com" target="_blank">Themesberg</a>
+                    </p>
                 </div>
                 <div class="col-12 col-md-8 col-xl-6 text-center text-lg-start">
                     <!-- List -->
@@ -424,12 +577,34 @@
         </footer>
     </main>
 
+
+
+
+
+
+
+
     <!-- Core -->
     <script src="{{ asset('assets-admin/vendor/@popperjs/core/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('assets-admin/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+
+
+
+
+
+
 
     <!-- Volt JS -->
     <script src="{{ asset('assets-admin/js/volt.js') }}"></script>
 </body>
 
+
+
+
+
+
+
+
 </html>
+
