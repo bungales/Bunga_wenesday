@@ -516,6 +516,7 @@
                                                     Edit
                                                 </a>
                                                 {{-- ini delete --}}
+                                                {{-- tombol delet --}}
                                                 <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
