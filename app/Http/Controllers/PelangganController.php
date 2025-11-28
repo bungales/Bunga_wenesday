@@ -1,39 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
+use App\Models\Multipleuploads;
 use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $filterableColumns = ['gender'];
         $searchableColumns = ['first_name', 'last_name', 'email', 'phone'];
 
-        $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns )
-        ->search($request, $searchableColumns)
-        ->paginate(10);
+        $data['dataPelanggan'] = Pelanggan::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10);
         return view('admin.pelanggan.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.pelanggan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //dd($request->all());
         $data['first_name'] = $request->first_name;
         $data['last_name']  = $request->last_name;
         $data['birthday']   = $request->birthday;
@@ -44,30 +36,21 @@ class PelangganController extends Controller
         Pelanggan::create($data);
 
         return redirect()->route('pelanggan.index')->with('success', 'Penambahan Data Berhasil!');
-
-        dd($data);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pelanggan $pelanggan)
+    // TAMBAHKAN METHOD SHOW UNTUK DETAIL PELANGGAN
+    public function show(string $id)
     {
-        //
+        $data['dataPelanggan'] = Pelanggan::with('files')->findOrFail($id);
+        return view('admin.pelanggan.show', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        $data['dataPelanggan'] = Pelanggan::findOrFail($id);
+        $data['dataPelanggan'] = Pelanggan::with('files')->findOrFail($id);
         return view('admin.pelanggan.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $pelanggan_id = $id;
@@ -84,15 +67,20 @@ class PelangganController extends Controller
         return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil Diupdate!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+
+        // Hapus semua file terkait
+        foreach ($pelanggan->files as $file) {
+            if (file_exists(public_path('images/' . $file->filename))) {
+                unlink(public_path('images/' . $file->filename));
+            }
+            $file->delete();
+        }
+
         $pelanggan->delete();
 
         return redirect()->route('pelanggan.index')->with('success', 'Data Berhasil Dihapus!');
     }
-
 }

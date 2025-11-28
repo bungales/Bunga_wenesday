@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeContoller;
 use App\Http\Controllers\UserController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\DashboardControllerr;
+use App\Http\Controllers\MultipleuploadsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,3 +51,7 @@ route::get('dashboard', [DashboardControllerr::class, 'index'])
 Route::resource('pelanggan', PelangganController::class);
 
 Route::resource('user', UserController::class);
+
+// Routes untuk multiple uploads - TIDAK ADA YANG DIUBAH/HAPUS, HANYA DITAMBAH
+Route::post('/uploads/store', [MultipleuploadsController::class, 'store'])->name('uploads.store');
+Route::delete('/uploads/{id}', [MultipleuploadsController::class, 'destroy'])->name('uploads.destroy');

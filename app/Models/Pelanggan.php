@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pelanggan extends Model
 {
@@ -16,6 +18,14 @@ class Pelanggan extends Model
         'email',
         'phone',
     ];
+
+    // Tambahkan relasi ke multipleuploads
+    public function files(): HasMany
+    {
+        return $this->hasMany(Multipleuploads::class, 'ref_id', 'pelanggan_id')
+                    ->where('ref_table', 'pelanggan');
+    }
+
     public function scopeFilter(Builder $query, $request, array $filterableColumns): Builder
     {
         foreach ($filterableColumns as $column) {
