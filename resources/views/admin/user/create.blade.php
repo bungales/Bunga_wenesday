@@ -31,6 +31,16 @@
         </div>
     </div>
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <div class="row">
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
@@ -40,58 +50,71 @@
                         <div class="row mb-4">
 
                             <div class="col-lg-4 col-sm-6">
-
-                                <!-- Name -->
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Nama Lengkap</label>
-                                    <input type="text" name="name" id="name" class="form-control" required>
-                                </div>
-
-                                <!-- Email -->
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" class="form-control" name="email" required>
-                                </div>
-
-                                <!-- Foto Profil -->
+                                <!-- Profile Picture -->
                                 <div class="mb-3">
                                     <label for="profile_picture" class="form-label">Foto Profil</label>
                                     <input type="file" name="profile_picture" id="profile_picture"
                                            class="form-control" accept="image/*">
+                                    <div class="form-text">Format: JPEG, PNG, JPG, GIF (Max: 2MB)</div>
+                                    @error('profile_picture')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
+                                <!-- Name -->
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control"
+                                           value="{{ old('name') }}" required>
+                                    @error('name')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input type="email" id="email" class="form-control" name="email"
+                                           value="{{ old('email') }}" required>
+                                    @error('email')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="col-lg-4 col-sm-12">
-
                                 <!-- Password -->
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                                     <input type="password" name="password" id="password" class="form-control" required>
+                                    @error('password')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                <!-- Confirmation Password -->
+                                <!-- Password Confirmation -->
                                 <div class="mb-3">
-                                    <label for="password-confirmation" class="form-label">Password Confirmation</label>
-                                    <input type="password" name="password_confrimation" id="password_confirmation"
-                                        class="form-control">
+                                    <label for="password_confirmation" class="form-label">Konfirmasi Password <span class="text-danger">*</span></label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation"
+                                        class="form-control" required>
+                                    @error('password_confirmation')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <!-- Buttons -->
-                                <div class="">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i> Simpan
+                                    </button>
                                     <a href="{{ route('user.index') }}"
                                         class="btn btn-outline-secondary ms-2">Batal</a>
                                 </div>
-
                             </div>
-
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
-
 @endsection

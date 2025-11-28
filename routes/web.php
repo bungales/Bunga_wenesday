@@ -55,3 +55,6 @@ Route::resource('user', UserController::class);
 // Routes untuk multiple uploads - TIDAK ADA YANG DIUBAH/HAPUS, HANYA DITAMBAH
 Route::post('/uploads/store', [MultipleuploadsController::class, 'store'])->name('uploads.store');
 Route::delete('/uploads/{id}', [MultipleuploadsController::class, 'destroy'])->name('uploads.destroy');
+
+// Routes untuk hapus profile picture user - TAMBAHAN BARU
+Route::delete('/user/{id}/picture', [UserController::class, 'destroyPicture'])->name('user.destroy.picture');

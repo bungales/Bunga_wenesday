@@ -12,7 +12,7 @@
                     </svg>
                 </a>
             </li>
-            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('user.index') }}">User</a></li>
             <li class="breadcrumb-item active" aria-current="page">Edit User</li>
         </ol>
     </nav>
@@ -23,74 +23,160 @@
             <p class="mb-0">Form untuk mengedit data user.</p>
         </div>
         <div>
-            <a href="{{ route('user.index') }}" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('user.index') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
         </div>
     </div>
 </div>
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <strong>Error!</strong>
+    <ul class="mb-0 mt-2">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if (session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
 
 <div class="row">
     <div class="col-12 mb-4">
         <div class="card border-0 shadow components-section">
             <div class="card-body">
-
-                <form action="{{ route('user.update', $datauser->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="row mb-4">
                         <div class="col-lg-4 col-sm-6">
+                            <!-- Current Profile Picture -->
+                            <div class="mb-3 text-center">
+                                @if($user->profile_picture)
+                                    <img src="{{ Storage::url($user->profile_picture) }}"
+                                         alt="Profile Picture"
+                                         class="rounded-circle shadow"
+                                         width="120" height="120"
+                                         style="object-fit: cover;">
+                                    <p class="mt-2 text-muted">Foto Profil Saat Ini</p>
 
-                            {{-- Foto Profil --}}
-                            @if($datauser->foto)
-                                <div class="mb-3 text-center">
-                                    <img src="{{ asset('storage/' . $datauser->foto) }}"
-                                        style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #ccc;">
-                                    <p class="mt-2">Foto Profil</p>
-                                </div>
-                            @endif
-
-                            <div class="mb-3">
-                                <label class="form-label">Ganti Foto</label>
-                                <input type="file" class="form-control" name="foto">
+                                    <!-- Delete Profile Picture Button -->
+                                    <div class="mt-2">
+                                        <form action="{{ route('user.destroy.picture', $user->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Hapus foto profil?')">
+                                                <i class="fas fa-trash me-1"></i> Hapus Foto
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                                         style="width: 120px; height: 120px;">
+                                        <i class="fas fa-user text-muted fa-3x"></i>
+                                    </div>
+                                    <p class="mt-2 text-muted">Belum ada foto profil</p>
+                                @endif
                             </div>
 
-                            {{-- Name --}}
+                            <!-- New Profile Picture -->
                             <div class="mb-3">
-                                <label for="name" class="form-label">Nama Lengkap</label>
-                                <input type="text" name="name" id="name" value="{{ $datauser->name }}"
+                                <label for="profile_picture" class="form-label">Ganti Foto Profil</label>
+                                <input type="file" name="profile_picture" id="profile_picture"
+                                       class="form-control" accept="image/*">
+                                <div class="form-text">Format: JPEG, PNG, JPG, GIF (Max: 2MB)</div>
+                                @error('profile_picture')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-sm-6">
+                            <!-- Name -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}"
                                        class="form-control" required>
+                                @error('name')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
 
-                            {{-- Email --}}
+                            <!-- Email -->
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                                 <input type="email" id="email" class="form-control"
-                                       value="{{ $datauser->email }}" name="email" required>
+                                       value="{{ old('email', $user->email) }}" name="email" required>
+                                @error('email')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-sm-12">
-
-                            {{-- Password --}}
+                            <!-- Password -->
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password (Opsional)</label>
-                                <input type="password" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control"
+                                       placeholder="Masukkan password baru">
                                 <small class="text-muted">Kosongkan jika tidak ingin mengubah password.</small>
+                                @error('password')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Password Confirmation -->
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation"
+                                       class="form-control" placeholder="Konfirmasi password baru">
+                                @error('password_confirmation')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Buttons -->
-                            <div class="">
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Simpan Perubahan
+                                </button>
                                 <a href="{{ route('user.index') }}" class="btn btn-outline-secondary ms-2">Batal</a>
                             </div>
                         </div>
                     </div>
                 </form>
-
             </div>
-
         </div>
     </div>
 </div>
+
+<script>
+// JavaScript untuk menangani password confirmation
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    const confirmField = document.getElementById('password_confirmation');
+
+    // Jika password dikosongkan, kosongkan juga confirm password
+    passwordField.addEventListener('input', function() {
+        if (this.value === '') {
+            confirmField.value = '';
+        }
+    });
+});
+</script>
 
 @endsection

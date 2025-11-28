@@ -30,13 +30,23 @@ class UserController extends Controller
     // STORE
     public function store(Request $request)
     {
-        $data['name']     = $request->name;
-        $data['email']    = $request->email;
-        $data['password'] = Hash::make($request->password);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|confirmed',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        // Upload Foto
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('foto-user');
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ];
+
+        // Upload Profile Picture
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $data['profile_picture'] = $path;
         }
 
         User::create($data);
@@ -44,11 +54,11 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'Penambahan Data Berhasil!');
     }
 
-    // EDIT
+    // EDIT - PERBAIKI INI
     public function edit(string $id)
     {
-        $data['datauser'] = User::findOrFail($id);
-        return view('admin.user.edit', $data);
+        $user = User::findOrFail($id);
+        return view('admin.user.edit', compact('user'));
     }
 
     // UPDATE
@@ -56,24 +66,32 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->name  = $request->name;
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6|confirmed',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update data dasar
+        $user->name = $request->name;
         $user->email = $request->email;
 
-        // Jika password diisi baru
-        if ($request->password) {
+        // Update password hanya jika diisi
+        if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
-        // Update Foto
-        if ($request->hasFile('foto')) {
-
-            // Hapus foto lama
-            if ($user->foto && Storage::exists($user->foto)) {
-                Storage::delete($user->foto);
+        // Update Profile Picture hanya jika ada file baru
+        if ($request->hasFile('profile_picture')) {
+            // Hapus foto lama jika ada
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
             }
 
             // Simpan foto baru
-            $user->foto = $request->file('foto')->store('foto-user');
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
         }
 
         $user->save();
@@ -86,13 +104,29 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // Hapus foto jika ada
-        if ($user->foto && Storage::exists($user->foto)) {
-            Storage::delete($user->foto);
+        // Hapus profile picture jika ada
+        if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+            Storage::disk('public')->delete($user->profile_picture);
         }
 
         $user->delete();
 
         return redirect()->route('user.index')->with('success', 'Data Berhasil Dihapus!');
+    }
+
+    // DELETE PROFILE PICTURE ONLY
+    public function destroyPicture(string $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+            Storage::disk('public')->delete($user->profile_picture);
+            $user->profile_picture = null;
+            $user->save();
+
+            return back()->with('success', 'Foto profil berhasil dihapus!');
+        }
+
+        return back()->with('error', 'Tidak ada foto profil untuk dihapus!');
     }
 }
