@@ -18,6 +18,7 @@
                 <li class="breadcrumb-item active" aria-current="page">Tambah User</li>
             </ol>
         </nav>
+
         <div class="d-flex justify-content-between w-100 flex-wrap">
             <div class="mb-3 mb-lg-0">
                 <h1 class="h4">Tambah User</h1>
@@ -34,10 +35,12 @@
         <div class="col-12 mb-4">
             <div class="card border-0 shadow components-section">
                 <div class="card-body">
-                    <form action="{{ route('user.store') }}" method="POST">
+                    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-4">
+
                             <div class="col-lg-4 col-sm-6">
+
                                 <!-- Name -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nama Lengkap</label>
@@ -46,13 +49,22 @@
 
                                 <!-- Email -->
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">email</label>
+                                    <label for="email" class="form-label">Email</label>
                                     <input type="email" id="email" class="form-control" name="email" required>
                                 </div>
+
+                                <!-- Foto Profil -->
+                                <div class="mb-3">
+                                    <label for="profile_picture" class="form-label">Foto Profil</label>
+                                    <input type="file" name="profile_picture" id="profile_picture"
+                                           class="form-control" accept="image/*">
+                                </div>
+
                             </div>
 
                             <div class="col-lg-4 col-sm-12">
-                                <!-- password-->
+
+                                <!-- Password -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" name="password" id="password" class="form-control" required>
@@ -71,7 +83,9 @@
                                     <a href="{{ route('user.index') }}"
                                         class="btn btn-outline-secondary ms-2">Batal</a>
                                 </div>
+
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -79,4 +93,5 @@
             </div>
         </div>
     </div>
+
 @endsection

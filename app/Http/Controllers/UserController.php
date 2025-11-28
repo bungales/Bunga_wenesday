@@ -4,71 +4,95 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // INDEX
+    public function index(Request $request)
     {
-        $data['dataUser'] = User::all();
+        $filterableColumns = ['name'];
+        $searchableColumns = ['name', 'email'];
+
+        $data['dataUser'] = User::filter($request, $filterableColumns)
+            ->search($request, $searchableColumns)
+            ->paginate(10);
+
         return view('admin.user.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // CREATE
     public function create()
     {
         return view('admin.user.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // STORE
     public function store(Request $request)
     {
         $data['name']     = $request->name;
         $data['email']    = $request->email;
         $data['password'] = Hash::make($request->password);
-        // $data['password_confirmation'] = $request->gender;
 
-        user::create($data);
+        // Upload Foto
+        if ($request->hasFile('foto')) {
+            $data['foto'] = $request->file('foto')->store('foto-user');
+        }
+
+        User::create($data);
 
         return redirect()->route('user.index')->with('success', 'Penambahan Data Berhasil!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // EDIT
     public function edit(string $id)
     {
-         $data['datauser'] = user::findOrFail($id);
+        $data['datauser'] = User::findOrFail($id);
         return view('admin.user.edit', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // UPDATE
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->name  = $request->name;
+        $user->email = $request->email;
+
+        // Jika password diisi baru
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+
+        // Update Foto
+        if ($request->hasFile('foto')) {
+
+            // Hapus foto lama
+            if ($user->foto && Storage::exists($user->foto)) {
+                Storage::delete($user->foto);
+            }
+
+            // Simpan foto baru
+            $user->foto = $request->file('foto')->store('foto-user');
+        }
+
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'Update Data Berhasil!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // DELETE
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        // Hapus foto jika ada
+        if ($user->foto && Storage::exists($user->foto)) {
+            Storage::delete($user->foto);
+        }
+
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'Data Berhasil Dihapus!');
     }
 }
