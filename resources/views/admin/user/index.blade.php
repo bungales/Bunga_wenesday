@@ -63,6 +63,15 @@
                                        placeholder="Cari email user...">
                             </div>
                             <div class="col-md-3">
+                                <label for="role" class="form-label">Filter Role</label>
+                                <select name="role" class="form-control">
+                                    <option value="">-- Semua Role --</option>
+                                    <option value="Super Admin" {{ request('role') == 'Super Admin' ? 'selected' : '' }}>Super Admin</option>
+                                    <option value="Pelanggan" {{ request('role') == 'Pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                                    <option value="Mitra" {{ request('role') == 'Mitra' ? 'selected' : '' }}>Mitra</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="search" class="form-label">Search</label>
                                 <div class="input-group">
                                     <input type="text"
@@ -81,7 +90,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-3 d-flex align-items-end">
+                            <div class="col-md-12 mt-3 d-flex align-items-end">
                                 <button type="submit" class="btn btn-primary me-2">
                                     <i class="fas fa-filter me-1"></i> Terapkan
                                 </button>
@@ -101,6 +110,7 @@
                                     <th class="border-0">No</th>
                                     <th class="border-0">Name</th>
                                     <th class="border-0">Email</th>
+                                    <th class="border-0">Role</th> {{-- TAMBAHAN KOLOM ROLE --}}
                                     <th class="border-0">Aksi</th>
                                 </tr>
                             </thead>
@@ -125,6 +135,11 @@
                                             <td>{{ $loop->iteration + ($dataUser->currentPage() - 1) * $dataUser->perPage() }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
+                                            <td>
+                                                <span class="{{ $item->getRoleBadgeClass() }}">
+                                                    {{ $item->role ?? 'Belum diatur' }}
+                                                </span>
+                                            </td>
                                             <td>
                                                 <a href="{{ route('user.edit', $item->id) }}"
                                                     class="btn btn-info btn-sm">
@@ -157,8 +172,8 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5" class="text-center py-4">
-                                            @if(request()->has('search') || request()->has('name') || request()->has('email'))
+                                        <td colspan="6" class="text-center py-4">
+                                            @if(request()->has('search') || request()->has('name') || request()->has('email') || request()->has('role'))
                                                 Tidak ada data yang sesuai dengan pencarian Anda.
                                             @else
                                                 Belum ada data user.
@@ -177,14 +192,16 @@
 
 
                     {{-- INFO HASIL FILTER DAN SEARCH --}}
-                    @if(request()->has('name') || request()->has('email') || request()->has('search'))
+                    @if(request()->has('name') || request()->has('email') || request()->has('search') || request()->has('role'))
                         <div class="mt-2 text-muted">
                             <small>
                                 Menampilkan hasil:
                                 @if(request('name')) Filter Nama: "{{ request('name') }}" @endif
-                                @if(request('name') && (request('email') || request('search'))) | @endif
+                                @if(request('name') && (request('email') || request('search') || request('role'))) | @endif
                                 @if(request('email')) Filter Email: "{{ request('email') }}" @endif
-                                @if(request('email') && request('search')) | @endif
+                                @if((request('email') || request('name')) && (request('search') || request('role'))) | @endif
+                                @if(request('role')) Filter Role: "{{ request('role') }}" @endif
+                                @if((request('role') || request('email') || request('name')) && request('search')) | @endif
                                 @if(request('search')) Search: "{{ request('search') }}" @endif
                             </small>
                         </div>
@@ -203,6 +220,10 @@
         .border {
             border: 2px solid #dee2e6 !important;
         }
+        .badge {
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+        }
     </style>
 @endsection
-

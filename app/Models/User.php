@@ -15,7 +15,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile_picture', // ← Tambahan penting
+        'profile_picture',
+        'role', // ← TAMBAHAN BARU
     ];
 
     protected $hidden = [
@@ -31,9 +32,9 @@ class User extends Authenticatable
         ];
     }
 
-    // ==========================
+
     //   FILTER & SEARCH
-    // ==========================
+
     public function scopeFilter($query, $request, array $filterableColumns)
     {
         foreach ($filterableColumns as $column) {
@@ -52,6 +53,38 @@ class User extends Authenticatable
                     $q->orWhere($column, 'LIKE', '%' . $request->search . '%');
                 }
             });
+        }
+    }
+
+   
+    //   HELPER METHOD ROLE
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'Super Admin';
+    }
+
+    public function isPelanggan()
+    {
+        return $this->role === 'Pelanggan';
+    }
+
+    public function isMitra()
+    {
+        return $this->role === 'Mitra';
+    }
+
+    public function getRoleBadgeClass()
+    {
+        switch ($this->role) {
+            case 'Super Admin':
+                return 'badge bg-danger';
+            case 'Pelanggan':
+                return 'badge bg-primary';
+            case 'Mitra':
+                return 'badge bg-success';
+            default:
+                return 'badge bg-secondary';
         }
     }
 }

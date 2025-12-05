@@ -82,7 +82,21 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-4 col-sm-12">
+                            <div class="col-lg-4 col-sm-6">
+                                <!-- Role -->
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+                                    <select name="role" id="role" class="form-control" required>
+                                        <option value="">-- Pilih Role --</option>
+                                        <option value="Super Admin" {{ old('role') == 'Super Admin' ? 'selected' : '' }}>Super Admin</option>
+                                        <option value="Pelanggan" {{ old('role') == 'Pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                                        <option value="Mitra" {{ old('role') == 'Mitra' ? 'selected' : '' }}>Mitra</option>
+                                    </select>
+                                    @error('role')
+                                        <div class="text-danger small">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Password -->
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
@@ -101,7 +115,9 @@
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
 
+                            <div class="col-lg-4 col-sm-12">
                                 <!-- Buttons -->
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-primary">
