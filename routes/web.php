@@ -1,14 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeContoller;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PegawaiController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\MahasiswaController;
-use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardControllerr;
+use App\Http\Controllers\HomeContoller;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\MultipleuploadsController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+// TAMBAHKAN BARIS INI
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,30 +25,29 @@ Route::get('/mahasiswa', function () {
 })->name('mahasiswa.show');
 
 Route::get('/nama/{param1}', function ($param1) {
-    return 'Nama saya: '.$param1;
+    return 'Nama saya: ' . $param1;
 });
 
 Route::get('/nim/{param1?}', function ($param1 = '') {
-    return 'NIM saya: '.$param1;
+    return 'NIM saya: ' . $param1;
 });
 
-Route :: get ('/mahasiswa/{param1}',[MahasiswaController:: class,'show']);
+Route::get('/mahasiswa/{param1}', [MahasiswaController::class, 'show']);
 
 Route::get('/about', function () {
     return view('halaman-about');
 });
 
-route::get('/home',[HomeContoller::class,'index'])
-          ->name('home');
-
+route::get('/home', [HomeContoller::class, 'index'])
+    ->name('home');
 
 Route::get('/pegawai', [PegawaiController::class, 'index']);
 
 Route::post('question/store', [QuestionController::class, 'store'])
-		->name('question.store');
+    ->name('question.store');
 
 route::get('dashboard', [DashboardControllerr::class, 'index'])
-        ->name('dashboard');
+    ->name('dashboard');
 
 Route::resource('pelanggan', PelangganController::class);
 
@@ -58,3 +59,18 @@ Route::delete('/uploads/{id}', [MultipleuploadsController::class, 'destroy'])->n
 
 // Routes untuk hapus profile picture user - TAMBAHAN BARU
 Route::delete('/user/{id}/picture', [UserController::class, 'destroyPicture'])->name('user.destroy.picture');
+
+//Login
+Route::get('auth',[AuthController::class,'index'])->name('auth');
+Route::post('auth/login',[AuthController::class,'login'])->name('auth.login');
+Route::get('auth/logout',[AuthController::class,'logout'])->name('auth.logout');
+
+
+
+
+
+
+
+
+
+
